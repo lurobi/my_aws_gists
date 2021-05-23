@@ -4,12 +4,6 @@ function killService() {
     service=$1
     sudo systemctl stop $service
     sudo systemctl kill --kill-who=all $service
-
-    # Wait until the status of the service is either exited or killed.
-    while ! (sudo systemctl status "$service" | grep -q "Main.*code=\(exited\|killed\)")
-    do
-        sleep 10
-    done
 }
 
 function disableTimers() {
@@ -51,6 +45,7 @@ rm -rf /tmp/efs-utils
 sudo mkdir -p /mnt/efs
 #sudo mount -t efs -o tls fs-849865ff:/ /mnt/efs
 sudo bash -c "echo 'fs-849865ff:/ /mnt/efs           efs    _netdev,noresvport,tls  0 0' >> /etc/fstab"
+sudo mount /mnt/efs
 
 wget https://raw.githubusercontent.com/TheRemote/MinecraftBedrockServer/master/SetupMinecraft.sh
 chmod +x SetupMinecraft.sh
